@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  MEMBER
+  ADMIN
+  OWNER
+}
+
+enum DonationStatus {
+  CREATED   
+  SUCCESS   
+  FAILED    
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(MEMBER)
+
+  donations Donation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Donation {
+  id                String          @id @default(cuid())
+  userId            String
+  amount            Int             
+  status            DonationStatus  @default(CREATED)
+
+  
+  gateway            String         
+  gatewayOrderId     String?        
+  gatewayPaymentId  String?        
+  gatewaySignature  String?        
+
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
