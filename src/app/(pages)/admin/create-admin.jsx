@@ -10,7 +10,6 @@ export default function CreateAdminPage() {
   const [adminsList, setAdminsList] = useState([]);
   const [loadingAdmins, setLoadingAdmins] = useState(false);
 
-  // Fetch admins list on component mount
   useEffect(() => {
     fetchAdmins();
   }, []);
